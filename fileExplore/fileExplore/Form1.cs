@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +13,43 @@ namespace fileExplore
 {
     public partial class Form1 : Form
     {
+        string path = @"C:\";
         public Form1()
         {
-            InitializeComponent();
+             InitializeComponent();
+            ListDirectory(treeViewEx, path);
+   
+        }
+        private void ListDirectory(TreeView treeView, string path)
+        {
+            treeView.Nodes.Clear();
+            var rootDirectoryInfo = new DirectoryInfo(path);
+            treeView.Nodes.Add(CreateDirectoryTreeNode(rootDirectoryInfo));
+        }
+        private static TreeNode CreateDirectoryTreeNode(DirectoryInfo directoryInfo)
+        {
+            var directoryNode = new TreeNode(directoryInfo.Name);
+           try
+           {
+                foreach (var directory in directoryInfo.GetDirectories())
+                {
+                    directoryNode.Nodes.Add(CreateDirectoryTreeNode(directory));
+                }
+                foreach (var file in directoryInfo.GetFiles())
+                {
+                    directoryNode.Nodes.Add(new TreeNode(file.Name));
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+
+            }
+
+            return directoryNode;
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           
         }
     }
 }
