@@ -23,8 +23,16 @@ namespace fileExplore
         private void ListDirectory(TreeView treeView, string path)
         {
             treeView.Nodes.Clear();
-            var rootDirectoryInfo = new DirectoryInfo(path);
-            treeView.Nodes.Add(CreateDirectoryTreeNode(rootDirectoryInfo));
+            var ListDriverInfor = DriveInfo.GetDrives();
+            foreach (DriveInfo drive in ListDriverInfor)
+            {
+                path = drive.Name.ToString();
+               var rootDirectoryInfo = new DirectoryInfo(path);
+                //MessageBox.Show(drive.Name);
+                treeView.Nodes.Add(CreateDirectoryTreeNode(rootDirectoryInfo));
+            }
+              
+
         }
         private static TreeNode CreateDirectoryTreeNode(DirectoryInfo directoryInfo)
         {
@@ -41,6 +49,10 @@ namespace fileExplore
                 }
             }
             catch (UnauthorizedAccessException)
+            {
+
+            }
+            catch (System.IO.IOException)
             {
 
             }
