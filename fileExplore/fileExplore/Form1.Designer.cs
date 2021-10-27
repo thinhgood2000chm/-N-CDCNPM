@@ -70,6 +70,7 @@ namespace fileExplore
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.roundButton1 = new fileExplore.RoundButton();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -393,11 +394,21 @@ namespace fileExplore
             this.label1.Text = "Path";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // roundButton1
+            // 
+            this.roundButton1.Location = new System.Drawing.Point(39, 47);
+            this.roundButton1.Name = "roundButton1";
+            this.roundButton1.Size = new System.Drawing.Size(57, 46);
+            this.roundButton1.TabIndex = 9;
+            this.roundButton1.Text = "roundButton1";
+            this.roundButton1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.roundButton1);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtPath);
             this.Controls.Add(this.label1);
@@ -455,6 +466,7 @@ namespace fileExplore
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Label label1;
+        private RoundButton roundButton1;
     }
 }
 
