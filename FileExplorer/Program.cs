@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace fileExplore
+namespace FileExplorer
 {
     static class Program
     {

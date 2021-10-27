@@ -1,0 +1,9 @@
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\obj\Debug\FileExplorer.Form1.resources
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\obj\Debug\FileExplorer.Properties.Resources.resources
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\obj\Debug\FileExplorer.csproj.GenerateResource.cache
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\obj\Debug\FileExplorer.csproj.CoreCompileInputs.cache
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\bin\Debug\FileExplorer.exe.config
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\bin\Debug\FileExplorer.exe
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\bin\Debug\FileExplorer.pdb
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\obj\Debug\FileExplorer.exe
+D:\HỌC KỲ 1\Chuyên đề CNPM\Đề tài\FileExplorer\obj\Debug\FileExplorer.pdb
