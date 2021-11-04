@@ -27,3 +27,15 @@ C:\Users\HP\Downloads\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.Gener
 C:\Users\HP\Downloads\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.CoreCompileInputs.cache
 C:\Users\HP\Downloads\fileExplore\fileExplore\obj\Debug\fileExplore.exe
 C:\Users\HP\Downloads\fileExplore\fileExplore\obj\Debug\fileExplore.pdb
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\Elasticsearch.Net.dll
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\Nest.dll
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\System.Memory.dll
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\System.Buffers.dll
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\System.Numerics.Vectors.dll
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\Elasticsearch.Net.pdb
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\Elasticsearch.Net.xml
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\Nest.pdb
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\Nest.xml
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.CopyComplete
