@@ -327,22 +327,18 @@ namespace fileExplore
                     // ghi lên elastic ở đây
                     var name = e.Name;
 
-                    var myJson = new[]
+                    var myJson = new
                     {
-                        new file
-                        {
-                            name = name,
-                            path = path,
-                            content = "dư lieu tu c# bulk"
-                        }
-
+                        name = name,
+                        path = path,
+                        content = "dư lieu tu c# bulk"
                     };
-                    //var response = elasticClient.Index(myJson, i => i.Index("filedatasearch").Id("222222222222222"));
-                    var bulkIndexResponse = elasticClient.Bulk(b => b
+                    var response = elasticClient.Index(myJson, i => i.Index("filedatasearch"));
+                    /*var bulkIndexResponse = elasticClient.Bulk(b => b
                                                                  .Index("filedatasearch")
                                                                  .IndexMany(myJson)
-                                                                );
-                    if (bulkIndexResponse.IsValid)
+                                                                );*/
+                    if (response.IsValid)
                     {
                         MessageBox.Show(e.FullPath + " Create success");
                     }
