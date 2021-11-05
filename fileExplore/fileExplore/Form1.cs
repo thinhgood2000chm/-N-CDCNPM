@@ -18,15 +18,16 @@ namespace fileExplore
     public partial class Form1 : Form
     {
         
-        FileStream fileStream, fileStreamRoot, fileStreamRead;
+        //FileStream fileStream, fileStreamRoot, fileStreamRead;
         ConnectionSettings connectionSettings;
         static ElasticClient elasticClient;
-        List<string> pathFiles = new List<string>();
+        //List<string> pathFiles = new List<string>();
         List<file> myJson = new List<file>();
-        //
+        // FileSystemWatcher
         FileSystemWatcher[] fileSystemWatchers;
         // fix duplicate change event
         static private Hashtable fileWriteTime = new Hashtable();
+        //static string[] ignoreFolders = { "$RECYCLE.BIN", "\\elasticsearch\\", "\\kibana-elasticsearch\\" };
 
 
         public Form1()
@@ -55,7 +56,7 @@ namespace fileExplore
             }
             //############################# chỗ này khi hoàn thành phải xóa đi   ########################################
 
-            //----------File system watcher: cập nhật thông tini khi có thay đổi file
+            //----------File system watcher: cập nhật thông tin khi có thay đổi file
             // get all drive in computer
             string[] drives = Environment.GetLogicalDrives();
 
@@ -282,9 +283,13 @@ namespace fileExplore
         //--- file system watcher
         private static void OnChanged(object sender, FileSystemEventArgs e)
         {
-            // không cập nhật trong RECYCLE.BIN và folder chứa file cài đặt
+            // không cập nhật trong những ignoreFolder ------ sẽ cập nhật cách kiểm tra "sạch hơn" sau
             var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation)
+                                || e.FullPath.Contains("$RECYCLE.BIN")
+                                || e.FullPath.Contains("\\elasticsearch\\")
+                                || e.FullPath.Contains("\\kibana-elasticsearch\\")
+                                || e.FullPath.Contains("\\ASUS\\ASUS");
             if (!ignoreFolder)
             {
                 // sữa lỗi ghi 2 lần một thông tin
@@ -306,7 +311,11 @@ namespace fileExplore
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
             var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation)
+                                || e.FullPath.Contains("$RECYCLE.BIN")
+                                || e.FullPath.Contains("\\elasticsearch\\")
+                                || e.FullPath.Contains("\\kibana-elasticsearch\\")
+                                || e.FullPath.Contains("\\ASUS\\ASUS");
             if (!ignoreFolder)
             {
                 var path = e.FullPath;
@@ -315,7 +324,7 @@ namespace fileExplore
                     fileWriteTime[path].ToString() != currentLastWriteTime
                     )
                 {
-                    // ghi lên elastic
+                    // ghi lên elastic ở đây
                     var name = e.Name;
 
                     var myJson = new[]
@@ -328,8 +337,21 @@ namespace fileExplore
                         }
 
                     };
-                    var response = elasticClient.Index(myJson, i => i.Index("filedatasearch"));
+                    //var response = elasticClient.Index(myJson, i => i.Index("filedatasearch").Id("222222222222222"));
+                    var bulkIndexResponse = elasticClient.Bulk(b => b
+                                                                 .Index("filedatasearch")
+                                                                 .IndexMany(myJson)
+                                                                );
+                    if (bulkIndexResponse.IsValid)
+                    {
+                        MessageBox.Show(e.FullPath + " Create success");
+                    }
+                    else
+                    {
+                        MessageBox.Show(e.FullPath + " Create not success");
+                    }
 
+                    //--
                     fileWriteTime[path] = currentLastWriteTime;
                 }
             }
@@ -339,7 +361,10 @@ namespace fileExplore
         private static void OnDeleted(object sender, FileSystemEventArgs e)
         {
             var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation) 
+                                || e.FullPath.Contains("$RECYCLE.BIN")
+                                || e.FullPath.Contains("\\elasticsearch\\")
+                                || e.FullPath.Contains("\\kibana-elasticsearch\\");
             if (!ignoreFolder)
             {
                 var path = e.FullPath;
@@ -349,7 +374,7 @@ namespace fileExplore
                     )
                 {
                     // xóa trên elastic ở đây
-                    
+                    MessageBox.Show(e.FullPath + " Delete");
 
                     //---
                     fileWriteTime[path] = currentLastWriteTime;
@@ -363,7 +388,11 @@ namespace fileExplore
 
 
             var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation)
+                                || e.FullPath.Contains("$RECYCLE.BIN")
+                                || e.FullPath.Contains("\\Admin\\AppData\\")
+                                || e.FullPath.Contains("\\elasticsearch\\")
+                                || e.FullPath.Contains("\\kibana-elasticsearch\\");
             if (!ignoreFolder)
             {
                 var path = e.FullPath;
@@ -373,6 +402,8 @@ namespace fileExplore
                     )
                 {
                     // đổi tên e.OldFullPath thành e.FullPath trên elastic ở đây
+
+                    MessageBox.Show(e.FullPath + " Rename");
 
 
                     //---
