@@ -39,3 +39,25 @@ E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\D
 E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\Nest.xml
 E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.CopyComplete
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\fileExplore.exe.config
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\fileExplore.exe
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\fileExplore.pdb
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\Elasticsearch.Net.dll
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\Nest.dll
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\System.Memory.dll
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\System.Buffers.dll
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\Elasticsearch.Net.pdb
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\Elasticsearch.Net.xml
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\Nest.pdb
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\Nest.xml
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.csprojAssemblyReference.cache
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.exe.config
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.Form1.resources
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.Properties.Resources.resources
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.GenerateResource.cache
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.CoreCompileInputs.cache
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.CopyComplete
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.exe
+D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.pdb

@@ -54,17 +54,26 @@ namespace fileExplore
             // mở file txt và lưu giá trị vào 1 list, list này dùng để so sánh xem có file nào mới được tạo thêm trên máy khi mà 
             // chương trình đang tắt hay ko, nếu có thì thêm vào file txt, và gửi lên server elastic, nếu ko thì bỏ qua ko gửi gì lên hết 
             //################################# url chỗ này có thể sẽ sửa lại sau này thanh đường dẫn tương đối#####################
-         /*   fileStreamRead = new FileStream(@"E:\log.txt", FileMode.Open, FileAccess.Read, FileShare.None);
-            StreamReader streamReader = new StreamReader(fileStreamRead);*/
-   /*         string pathFile = streamReader.ReadLine();
+            fileStreamRead = new FileStream(@"D:\504073_AdvancedSE_Project\-N-CDCNPM\DirectoryMonitorService\DirectoryMonitorService\bin\Debug", FileMode.Open, FileAccess.Read, FileShare.None);
+            StreamReader streamReader = new StreamReader(fileStreamRead);
+            string pathFile = streamReader.ReadLine();
             while (pathFile != null)
             {
-                pathFiles.Add(pathFile); // lưu giá trị đọc từ file vào list
+                if (pathFile.Contains("Created")){
+                    Debug.WriteLine(pathFile);
+                    pathFiles.Add(pathFile); // lưu giá trị đọc từ file vào list
+                }
+                
                 pathFile = streamReader.ReadLine();
             }
             streamReader.Close();
+
             fileStreamRead.Close();
-*/
+            Debug.WriteLine(pathFile);
+            foreach(var e in pathFiles)
+            {
+                Debug.WriteLine(e);
+            }
             // khởi tạo root gốc trong tree node 
             TreeNode rootNode;
 
@@ -88,7 +97,7 @@ namespace fileExplore
                }*/
 
 
-            DirectoryInfo info = new DirectoryInfo(@"G:\");
+            DirectoryInfo info = new DirectoryInfo(@"D:\GAME-OFF");
             if (info.Exists)
             {
 
@@ -115,9 +124,7 @@ namespace fileExplore
                 aNode.Tag = subDir;
                 aNode.ImageKey = "folder";
 
-             
                 GetFileInFolder(subDir);
-
 
                 try
                 {
