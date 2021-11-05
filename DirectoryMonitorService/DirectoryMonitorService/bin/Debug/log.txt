@@ -326,3 +326,15 @@ Changed - D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ
 Deleted: D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_go_Lucene84_0.doc 
 Changed - D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gp_Lucene84_0.doc 
 Deleted: D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_g5_Lucene84_0.doc 
+Changed - D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gq_Lucene84_0.doc 
+Deleted: D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gq_Lucene84_0.doc 
+Renamed: Old: C:\Users\Admin\AppData\Local\Microsoft\Edge\User Data\Default\Service Worker\CacheStorage\3cedfb74d44f2e84198d23075aef16c34a668ceb\index.txt New: C:\Users\Admin\AppData\Local\Microsoft\Edge\User Data\Default\Service Worker\CacheStorage\3cedfb74d44f2e84198d23075aef16c34a668ceb\index.txt~RF1ffc677.TMP 
+Renamed: Old: C:\Users\Admin\AppData\Local\Microsoft\Edge\User Data\Default\Service Worker\CacheStorage\3cedfb74d44f2e84198d23075aef16c34a668ceb\index.txt.tmp New: C:\Users\Admin\AppData\Local\Microsoft\Edge\User Data\Default\Service Worker\CacheStorage\3cedfb74d44f2e84198d23075aef16c34a668ceb\index.txt 
+Changed - D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gr_Lucene84_0.doc 
+Deleted: D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gr_Lucene84_0.doc 
+Changed - D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gs_Lucene84_0.doc 
+Deleted: D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gs_Lucene84_0.doc 
+Changed - D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gt_Lucene84_0.doc 
+Deleted: D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gt_Lucene84_0.doc 
+Changed - D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gu_Lucene84_0.doc 
+Deleted: D:\iTProgram\elasticsearch\data\nodes\0\indices\R-qZBjcCTw2WNC_1KPfCXQ\0\index\_gu_Lucene84_0.doc 
