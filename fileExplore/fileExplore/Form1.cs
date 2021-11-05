@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.Collections;
 
 namespace fileExplore
 {
@@ -19,9 +20,15 @@ namespace fileExplore
         
         FileStream fileStream, fileStreamRoot, fileStreamRead;
         ConnectionSettings connectionSettings;
-        ElasticClient elasticClient;
+        static ElasticClient elasticClient;
         List<string> pathFiles = new List<string>();
         List<file> myJson = new List<file>();
+        //
+        FileSystemWatcher[] fileSystemWatchers;
+        // fix duplicate change event
+        static private Hashtable fileWriteTime = new Hashtable();
+
+
         public Form1()
         {
             InitializeComponent();
@@ -47,6 +54,48 @@ namespace fileExplore
                 MessageBox.Show("them thanh cong");
             }
             //############################# chỗ này khi hoàn thành phải xóa đi   ########################################
+
+            //----------File system watcher: cập nhật thông tini khi có thay đổi file
+            // get all drive in computer
+            string[] drives = Environment.GetLogicalDrives();
+
+            // filter file types
+            string[] extensions = { "*.txt", "*.doc", "*.docx", "*.pdf" };
+
+            // init fileSystemWatcher for each drive
+            fileSystemWatchers = new FileSystemWatcher[drives.Length * extensions.Length];
+
+            int i = 0;
+            foreach (string strDrive in drives)
+            {
+                // will be a fileSystemWatcher of each file type. B/c fileSystemWatcher don't support Filters in .Net Framework
+                foreach (string etx in extensions)
+                {
+                    FileSystemWatcher watcher = new FileSystemWatcher(strDrive)
+                    {
+                        Filter = etx,
+                        EnableRaisingEvents = true,
+                        IncludeSubdirectories = true
+                    };
+                    // Will update when there is a change
+                    watcher.NotifyFilter = NotifyFilters.Attributes
+                                     | NotifyFilters.CreationTime
+                                     | NotifyFilters.DirectoryName
+                                     | NotifyFilters.FileName
+                                     | NotifyFilters.LastWrite
+                                     | NotifyFilters.Security
+                                     | NotifyFilters.Size;
+
+                    watcher.Changed += OnChanged;
+                    watcher.Created += OnCreated;
+                    watcher.Deleted += OnDeleted;
+                    watcher.Renamed += OnRenamed;
+
+                    fileSystemWatchers[i] = watcher;
+                    i++;
+                }
+            }
+            //END File system watcher-------
         }
 
         private void PopulateTreeView()
@@ -54,8 +103,7 @@ namespace fileExplore
             // mở file txt và lưu giá trị vào 1 list, list này dùng để so sánh xem có file nào mới được tạo thêm trên máy khi mà 
             // chương trình đang tắt hay ko, nếu có thì thêm vào file txt, và gửi lên server elastic, nếu ko thì bỏ qua ko gửi gì lên hết 
             //################################# url chỗ này có thể sẽ sửa lại sau này thanh đường dẫn tương đối#####################
-            fileStreamRead = new FileStream(@"D:\504073_AdvancedSE_Project\-N-CDCNPM\DirectoryMonitorService\DirectoryMonitorService\bin\Debug", FileMode.Open, FileAccess.Read, FileShare.None);
-            StreamReader streamReader = new StreamReader(fileStreamRead);
+            /*StreamReader streamReader = new StreamReader(fileStreamRead);
             string pathFile = streamReader.ReadLine();
             while (pathFile != null)
             {
@@ -73,7 +121,7 @@ namespace fileExplore
             foreach(var e in pathFiles)
             {
                 Debug.WriteLine(e);
-            }
+            }*/
             // khởi tạo root gốc trong tree node 
             TreeNode rootNode;
 
@@ -218,6 +266,8 @@ namespace fileExplore
             listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
+
+
         private void treeViewEx_AfterSelect(object sender, TreeViewEventArgs e)
         {
 
@@ -228,6 +278,108 @@ namespace fileExplore
 
         }
 
-       
+
+        //--- file system watcher
+        private static void OnChanged(object sender, FileSystemEventArgs e)
+        {
+            // không cập nhật trong RECYCLE.BIN và folder chứa file cài đặt
+            var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            if (!ignoreFolder)
+            {
+                // sữa lỗi ghi 2 lần một thông tin
+                var path = e.FullPath;
+                string currentLastWriteTime = File.GetLastWriteTime(e.FullPath).ToString();
+                if (!fileWriteTime.ContainsKey(path) ||
+                    fileWriteTime[path].ToString() != currentLastWriteTime
+                    )
+                {
+                    // sửa nội dung file trên elastic ở đây
+
+
+                    //---                    
+                    fileWriteTime[path] = currentLastWriteTime;
+                }
+            }
+        }
+
+        private static void OnCreated(object sender, FileSystemEventArgs e)
+        {
+            var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            if (!ignoreFolder)
+            {
+                var path = e.FullPath;
+                string currentLastWriteTime = File.GetLastWriteTime(e.FullPath).ToString();
+                if (!fileWriteTime.ContainsKey(path) ||
+                    fileWriteTime[path].ToString() != currentLastWriteTime
+                    )
+                {
+                    // ghi lên elastic
+                    var name = e.Name;
+
+                    var myJson = new[]
+                    {
+                        new file
+                        {
+                            name = name,
+                            path = path,
+                            content = "dư lieu tu c# bulk"
+                        }
+
+                    };
+                    var response = elasticClient.Index(myJson, i => i.Index("filedatasearch"));
+
+                    fileWriteTime[path] = currentLastWriteTime;
+                }
+            }
+
+        }
+
+        private static void OnDeleted(object sender, FileSystemEventArgs e)
+        {
+            var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            if (!ignoreFolder)
+            {
+                var path = e.FullPath;
+                string currentLastWriteTime = File.GetLastWriteTime(e.FullPath).ToString();
+                if (!fileWriteTime.ContainsKey(path) ||
+                    fileWriteTime[path].ToString() != currentLastWriteTime
+                    )
+                {
+                    // xóa trên elastic ở đây
+                    
+
+                    //---
+                    fileWriteTime[path] = currentLastWriteTime;
+                }
+            }
+        }
+
+        private static void OnRenamed(object sender, RenamedEventArgs e)
+        {
+            var msg = $"Renamed: Old: {e.OldFullPath} New: {e.FullPath} {System.Environment.NewLine}";
+
+
+            var serviceLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            bool ignoreFolder = e.FullPath.Contains(serviceLocation) || e.FullPath.Contains("$RECYCLE.BIN");
+            if (!ignoreFolder)
+            {
+                var path = e.FullPath;
+                string currentLastWriteTime = File.GetLastWriteTime(e.FullPath).ToString();
+                if (!fileWriteTime.ContainsKey(path) ||
+                    fileWriteTime[path].ToString() != currentLastWriteTime
+                    )
+                {
+                    // đổi tên e.OldFullPath thành e.FullPath trên elastic ở đây
+
+
+                    //---
+                    fileWriteTime[path] = currentLastWriteTime;
+                }
+            }
+        }
+        // END file system watcher
     }
 }
