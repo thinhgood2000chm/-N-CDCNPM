@@ -69,32 +69,49 @@ namespace fileExplore
             int i = 0;
             foreach (string strDrive in drives)
             {
-                // will be a fileSystemWatcher of each file type. B/c fileSystemWatcher don't support Filters in .Net Framework
-                foreach (string etx in extensions)
+                if (!Directory.Exists(strDrive))
                 {
-                    FileSystemWatcher watcher = new FileSystemWatcher(strDrive)
-                    {
-                        Filter = etx,
-                        EnableRaisingEvents = true,
-                        IncludeSubdirectories = true
-                    };
-                    // Will update when there is a change
-                    watcher.NotifyFilter = NotifyFilters.Attributes
-                                     | NotifyFilters.CreationTime
-                                     | NotifyFilters.DirectoryName
-                                     | NotifyFilters.FileName
-                                     | NotifyFilters.LastWrite
-                                     | NotifyFilters.Security
-                                     | NotifyFilters.Size;
-
-                    watcher.Changed += OnChanged;
-                    watcher.Created += OnCreated;
-                    watcher.Deleted += OnDeleted;
-                    watcher.Renamed += OnRenamed;
-
-                    fileSystemWatchers[i] = watcher;
-                    i++;
+                    Debug.WriteLine("da vao");
+                    continue;
                 }
+                   
+
+                Debug.WriteLine(strDrive);
+                // will be a fileSystemWatcher of each file type. B/c fileSystemWatcher don't support Filters in .Net Framework
+                try
+                {
+                    foreach (string etx in extensions)
+                    {
+                        FileSystemWatcher watcher = new FileSystemWatcher(strDrive)
+                        {
+                            Filter = etx,
+                            EnableRaisingEvents = true,
+                            IncludeSubdirectories = true
+                        };
+                        // Will update when there is a change
+                        watcher.NotifyFilter = NotifyFilters.Attributes
+                                         | NotifyFilters.CreationTime
+                                         | NotifyFilters.DirectoryName
+                                         | NotifyFilters.FileName
+                                         | NotifyFilters.LastWrite
+                                         | NotifyFilters.Security
+                                         | NotifyFilters.Size;
+
+                        watcher.Changed += OnChanged;
+                        watcher.Created += OnCreated;
+                        watcher.Deleted += OnDeleted;
+                        watcher.Renamed += OnRenamed;
+
+                        fileSystemWatchers[i] = watcher;
+                        i++;
+                    }
+
+                }
+                catch (ArgumentException)
+                {
+
+                }
+              
             }
             //END File system watcher-------
         }
@@ -127,26 +144,26 @@ namespace fileExplore
             TreeNode rootNode;
 
             //###################################### ko được xóa những cái comment này ######################################
-            /*   var ListDriverInfor = DriveInfo.GetDrives();// lây tất cả các ổ đĩa ( các ổ đia trong máy, ko bao gồm các file trong ổ đĩa)
-               foreach (DriveInfo drive in ListDriverInfor) // bắt đầu tìm kiếm trong các ổ đĩa để lấy ra các folder và các file 
-               {
-                   string path = drive.Name.ToString();
-                   DirectoryInfo info = new DirectoryInfo(path);
+            /* var ListDriverInfor = DriveInfo.GetDrives();// lây tất cả các ổ đĩa ( các ổ đia trong máy, ko bao gồm các file trong ổ đĩa)
+             foreach (DriveInfo drive in ListDriverInfor) // bắt đầu tìm kiếm trong các ổ đĩa để lấy ra các folder và các file 
+             {
+                 string path = drive.Name.ToString();
+                 DirectoryInfo info = new DirectoryInfo(path);
 
-                   if (info.Exists)
-                   {
-                       //GetFileInFolder(info);
-                       rootNode = new TreeNode(info.Name);// nếu như có tồn tại thư mục con năm trong path ( path là đường dẫn vd khi bắt đầu với ổ c path sẽ là C) 
-                       rootNode.ImageIndex = 2;// gắn image cho root node ( đây là image dành cho ổ đĩa c d e ... , các folder được gắn mặc định ) 
-                       rootNode.Tag = info;
-                       GetDirectories(info.GetDirectories(), rootNode);// tìm kiếm các folder bên trong ổ đĩa
+                 if (info.Exists)
+                 {
+                     //GetFileInFolder(info);
+                     rootNode = new TreeNode(info.Name);// nếu như có tồn tại thư mục con năm trong path ( path là đường dẫn vd khi bắt đầu với ổ c path sẽ là C) 
+                     rootNode.ImageIndex = 2;// gắn image cho root node ( đây là image dành cho ổ đĩa c d e ... , các folder được gắn mặc định ) 
+                     rootNode.Tag = info;
+                     GetDirectories(info.GetDirectories(), rootNode);// tìm kiếm các folder bên trong ổ đĩa
 
-                       treeViewEx.Nodes.Add(rootNode);// thêm root node vào tree view để tạo ra nhánh của 1 ổ đĩa 
-                   }
-               }*/
+                     treeViewEx.Nodes.Add(rootNode);// thêm root node vào tree view để tạo ra nhánh của 1 ổ đĩa 
+                 }
+             }
+ */
 
-
-            DirectoryInfo info = new DirectoryInfo(@"D:\GAME-OFF");
+            DirectoryInfo info = new DirectoryInfo(@"G:\");
             if (info.Exists)
             {
 
@@ -290,6 +307,8 @@ namespace fileExplore
                                 || e.FullPath.Contains("\\elasticsearch\\")
                                 || e.FullPath.Contains("\\kibana-elasticsearch\\")
                                 || e.FullPath.Contains("\\ASUS\\ASUS");
+            Debug.WriteLine(serviceLocation);
+            Debug.WriteLine(ignoreFolder);
             if (!ignoreFolder)
             {
                 // sữa lỗi ghi 2 lần một thông tin
@@ -315,7 +334,8 @@ namespace fileExplore
                                 || e.FullPath.Contains("$RECYCLE.BIN")
                                 || e.FullPath.Contains("\\elasticsearch\\")
                                 || e.FullPath.Contains("\\kibana-elasticsearch\\")
-                                || e.FullPath.Contains("\\ASUS\\ASUS");
+                                || e.FullPath.Contains("\\ASUS\\ASUS")
+                                || e.FullPath.Contains("G:\\elasticsearch-7.15.1");
             if (!ignoreFolder)
             {
                 var path = e.FullPath;
@@ -360,7 +380,8 @@ namespace fileExplore
             bool ignoreFolder = e.FullPath.Contains(serviceLocation) 
                                 || e.FullPath.Contains("$RECYCLE.BIN")
                                 || e.FullPath.Contains("\\elasticsearch\\")
-                                || e.FullPath.Contains("\\kibana-elasticsearch\\");
+                                || e.FullPath.Contains("\\kibana-elasticsearch\\")
+                                || e.FullPath.Contains("G:\\elasticsearch-7.15.1");
             if (!ignoreFolder)
             {
                 var path = e.FullPath;
