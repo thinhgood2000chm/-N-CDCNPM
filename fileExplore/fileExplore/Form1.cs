@@ -34,6 +34,8 @@ namespace fileExplore
         {
             InitializeComponent();
             PopulateTreeView();
+            Task subThreadForGetAllFile = new Task(()=>getAllFileInDriver());
+            subThreadForGetAllFile.Start(); // cho tiến trình tìm file chạy 1 thread khác 
             this.treeViewEx.NodeMouseClick += new TreeNodeMouseClickEventHandler(this.treeViewEx_NodeMouseClick);
         }
 
@@ -115,7 +117,100 @@ namespace fileExplore
             }
             //END File system watcher-------
         }
+        // tiến hành chạy để lấy file gửi lên server 
+        public void getAllFileInDriver()
+        {
+            /*   DirectoryInfo info = new DirectoryInfo(@"G:\");
+               if (info.Exists)
+               {
+                   Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
+                   task.Start();
+                   GetFileInFolder(info);
+                   task.Wait();
+               }*/
 
+            var ListDriverInfor = DriveInfo.GetDrives();
+            for (int i = 0; i < ListDriverInfor.Length; i++)
+            {
+                DirectoryInfo info = new DirectoryInfo(ListDriverInfor[i].Name);
+                if (info.Exists)
+                {
+                    Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
+                    task.Start();// trong thread của tiến trình lấy all file tạo ra 1 thread khác để có thể xử lý bất đồng bộ
+                    GetFileInFolder(info);// riêng cho thread này để ko ảnh hưởng đến thread main 
+                    task.Wait(); // xử lý bất đồng bộ, buộc phải đợi thread hiện tại trong subThreadForGetAllFile chạy xong mới tạo mới thread khác 
+
+                }
+
+            }
+            MessageBox.Show("da ket thuc main");
+        }
+
+        public void RecursiveGetFile(DirectoryInfo[] subDirs)
+        {
+            DirectoryInfo[] subSubDirs;
+
+            foreach (DirectoryInfo subDir in subDirs) // bắt đầu tìm kiếm trong từng ổ đĩa 
+            {
+                GetFileInFolder(subDir);
+                try
+                {
+                    subSubDirs = subDir.GetDirectories();
+
+                    if (subSubDirs.Length != 0)
+                    {
+
+                        RecursiveGetFile(subSubDirs);// cái này gọi là đệ quy sau khi tìm xong 1 folder sẽ tiếp tục tìm kiếm lại trong folder con của folder đó xem có còn file hay folder nào nữa ko 
+                                                   // bắt sự kiện click thì mới gọi đệ quy 
+                    }
+
+                }
+                catch (UnauthorizedAccessException)
+                {
+
+                }
+                catch (IOException)
+                {
+
+                }
+            }
+        }
+
+        private List<file> GetFileInFolder(DirectoryInfo subDir)
+        {
+            try
+            {
+                foreach (FileInfo file in subDir.GetFiles())
+                {
+                    // đọc và lấy ra những path có định dạng file là txt, doc, pdf
+                    if (file.Extension == ".txt" || file.Extension == ".docx" || file.Extension == ".pdf")
+                    {
+
+                        {
+                            /*  myJson.Add(new file()
+                              {
+                                  name = file.Name,
+                                  path = file.FullName,
+                                  content = "dư lieu tu c# bulk 123" // cái chỗ này sẽ đọc nội dung file ra nhưng chưa làm tới 
+                              });*/
+                            Debug.WriteLine(file.Name + "path = " + file.FullName);
+
+                        }
+                    }
+
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+
+            }
+            catch (IOException)
+            {
+
+            }
+            return myJson;
+
+        }
         private void PopulateTreeView()
         {
             // mở file txt và lưu giá trị vào 1 list, list này dùng để so sánh xem có file nào mới được tạo thêm trên máy khi mà 
@@ -144,48 +239,47 @@ namespace fileExplore
             TreeNode rootNode;
 
             //###################################### ko được xóa những cái comment này ######################################
-            /* var ListDriverInfor = DriveInfo.GetDrives();// lây tất cả các ổ đĩa ( các ổ đia trong máy, ko bao gồm các file trong ổ đĩa)
-             foreach (DriveInfo drive in ListDriverInfor) // bắt đầu tìm kiếm trong các ổ đĩa để lấy ra các folder và các file 
-             {
-                 string path = drive.Name.ToString();
-                 DirectoryInfo info = new DirectoryInfo(path);
-
-                 if (info.Exists)
-                 {
-                     //GetFileInFolder(info);
-                     rootNode = new TreeNode(info.Name);// nếu như có tồn tại thư mục con năm trong path ( path là đường dẫn vd khi bắt đầu với ổ c path sẽ là C) 
-                     rootNode.ImageIndex = 2;// gắn image cho root node ( đây là image dành cho ổ đĩa c d e ... , các folder được gắn mặc định ) 
-                     rootNode.Tag = info;
-                     GetDirectories(info.GetDirectories(), rootNode);// tìm kiếm các folder bên trong ổ đĩa
-
-                     treeViewEx.Nodes.Add(rootNode);// thêm root node vào tree view để tạo ra nhánh của 1 ổ đĩa 
-                 }
-             }
- */
-
-            DirectoryInfo info = new DirectoryInfo(@"G:\");
-            if (info.Exists)
+            var ListDriverInfor = DriveInfo.GetDrives();// lây tất cả các ổ đĩa ( các ổ đia trong máy, ko bao gồm các file trong ổ đĩa)
+            foreach (DriveInfo drive in ListDriverInfor) // bắt đầu tìm kiếm trong các ổ đĩa để lấy ra các folder và các file 
             {
+                string path = drive.Name.ToString();
+                DirectoryInfo info = new DirectoryInfo(path);
 
-                GetFileInFolder(info);
+                if (info.Exists)
+                {
+                    //GetFileInFolder(info);
+                    rootNode = new TreeNode(info.Name);// nếu như có tồn tại thư mục con năm trong path ( path là đường dẫn vd khi bắt đầu với ổ c path sẽ là C) 
+                    rootNode.ImageIndex = 2;// gắn image cho root node ( đây là image dành cho ổ đĩa c d e ... , các folder được gắn mặc định ) 
+                    rootNode.Tag = info;
+                    //GetDirectories(info.GetDirectories(), rootNode);// tìm kiếm các folder bên trong ổ đĩa
 
-                rootNode = new TreeNode(info.Name);
-                rootNode.Tag = info;
-                GetDirectories(info.GetDirectories(), rootNode);
-                rootNode.ImageIndex = 2;
-                treeViewEx.Nodes.Add(rootNode);
+                    treeViewEx.Nodes.Add(rootNode);// thêm root node vào tree view để tạo ra nhánh của 1 ổ đĩa 
+                }
             }
+
+
+            /*  DirectoryInfo info = new DirectoryInfo(@"G:\");
+              if (info.Exists)
+              {
+
+                  GetFileInFolder(info);
+
+                  rootNode = new TreeNode(info.Name);
+                  rootNode.Tag = info;
+                  //GetDirectories(info.GetDirectories(), rootNode);
+                  rootNode.ImageIndex = 2;
+                  treeViewEx.Nodes.Add(rootNode);
+              }*/
         }
 
         private void GetDirectories(DirectoryInfo[] subDirs, TreeNode nodeToAddTo)
         {
          
             TreeNode aNode;
-            DirectoryInfo[] subSubDirs;
+            //DirectoryInfo[] subSubDirs;
          
             foreach (DirectoryInfo subDir in subDirs) // bắt đầu tìm kiếm trong từng ổ đĩa 
             {
-    
                 aNode = new TreeNode(subDir.Name, 0, 0);
                 aNode.Tag = subDir;
                 aNode.ImageKey = "folder";
@@ -194,12 +288,13 @@ namespace fileExplore
 
                 try
                 {
-                    subSubDirs = subDir.GetDirectories();
+                  /*  subSubDirs = subDir.GetDirectories();
 
                     if (subSubDirs.Length != 0)
                     {
-                        GetDirectories(subSubDirs, aNode);// cái này gọi là đệ quy sau khi tìm xong 1 folder sẽ tiếp tục tìm kiếm lại trong folder con của folder đó xem có còn file hay folder nào nữa ko 
-                    }
+                        //GetDirectories(subSubDirs, aNode);// cái này gọi là đệ quy sau khi tìm xong 1 folder sẽ tiếp tục tìm kiếm lại trong folder con của folder đó xem có còn file hay folder nào nữa ko 
+                    // bắt sự kiện click thì mới gọi đệ quy 
+                    }*/
                  
                     nodeToAddTo.Nodes.Add(aNode);// add folder vào ổ đĩa 
               
@@ -215,40 +310,7 @@ namespace fileExplore
             }
         }
 
-        private List<file> GetFileInFolder(DirectoryInfo subDir)
-        {
-            try
-            {
-                foreach (FileInfo file in subDir.GetFiles())
-                {
-                    // đọc và lấy ra những path có định dạng file là txt, doc, pdf
-                    if (file.Extension == ".txt" || file.Extension == ".docx" || file.Extension == ".pdf")
-                    {
-
-                        {
-                            myJson.Add(new file()
-                            {
-                                name = file.Name,
-                                path = file.FullName,
-                                content = "dư lieu tu c# bulk 123" // cái chỗ này sẽ đọc nội dung file ra nhưng chưa làm tới 
-                            });
-
-                        }
-                    }
-
-                }
-            }
-            catch (UnauthorizedAccessException)
-            {
-
-            }
-            catch (IOException)
-            {
-
-            }
-            return myJson;
-        
-    }
+       
 
         // thiết lập tree view mỗi khi bấm vào thì list view sẽ chuyển theo ứng vs tree view
         private void treeViewEx_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -256,6 +318,8 @@ namespace fileExplore
             TreeNode newSelected = e.Node;
             listView1.Items.Clear();
             DirectoryInfo nodeDirInfo = (DirectoryInfo)newSelected.Tag;
+
+            GetDirectories(nodeDirInfo.GetDirectories(), newSelected);
             ListViewItem.ListViewSubItem[] subItems;
             ListViewItem item = null;
 
