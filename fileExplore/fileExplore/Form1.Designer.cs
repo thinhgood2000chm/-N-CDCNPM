@@ -71,6 +71,7 @@ namespace fileExplore
             this.txtPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.roundButton1 = new fileExplore.RoundButton();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -403,11 +404,19 @@ namespace fileExplore
             this.roundButton1.Text = "roundButton1";
             this.roundButton1.UseVisualStyleBackColor = true;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(358, 73);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(241, 23);
+            this.progressBar1.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.roundButton1);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtPath);
@@ -467,6 +476,7 @@ namespace fileExplore
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Label label1;
         private RoundButton roundButton1;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

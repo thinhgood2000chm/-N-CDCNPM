@@ -61,3 +61,4 @@ D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExp
 D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.csproj.CopyComplete
 D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.exe
 D:\504073_AdvancedSE_Project\-N-CDCNPM\fileExplore\fileExplore\obj\Debug\fileExplore.pdb
+E:\filehoctap\laptrinh\CDCNPM\ĐỒ ÁN CUỐI KÌ\fileExplore\fileExplore\obj\Debug\fileExplore.ProgressDialog.resources

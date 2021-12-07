@@ -29,6 +29,8 @@ namespace fileExplore
         static private Hashtable fileWriteTime = new Hashtable();
         //static string[] ignoreFolders = { "$RECYCLE.BIN", "\\elasticsearch\\", "\\kibana-elasticsearch\\" };
 
+        bool isProcessRunning = false;
+        ProgressDialog progressBar = new ProgressDialog();
 
         public Form1()
         {
@@ -120,42 +122,60 @@ namespace fileExplore
         // tiến hành chạy để lấy file gửi lên server 
         public void getAllFileInDriver()
         {
-            /*   DirectoryInfo info = new DirectoryInfo(@"G:\");
-               if (info.Exists)
-               {
-                   Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
-                   task.Start();
-                   GetFileInFolder(info);
-                   task.Wait();
-               }*/
+            /*    DirectoryInfo info = new DirectoryInfo(@"G:\");
+                if (info.Exists)
+                {
+                    Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
+                    task.Start();
+    
 
+                    GetFileInFolder(info);
+                    task.Wait();
+                }*/
+   
             var ListDriverInfor = DriveInfo.GetDrives();
             for (int i = 0; i < ListDriverInfor.Length; i++)
             {
                 DirectoryInfo info = new DirectoryInfo(ListDriverInfor[i].Name);
                 if (info.Exists)
                 {
+                    isProcessRunning = true;
+                    for( int process =0; process<info.GetDirectories().Length; process++)
+                    {
+                        Debug.WriteLine("############### " + process); 
+                        progressBar.UpdateProgress(process, info.GetDirectories().Length);
+                    }
+       
                     Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
                     task.Start();// trong thread của tiến trình lấy all file tạo ra 1 thread khác để có thể xử lý bất đồng bộ
-                    GetFileInFolder(info);// riêng cho thread này để ko ảnh hưởng đến thread main 
+                                 //GetFileInFolder(info);// riêng cho thread này để ko ảnh hưởng đến thread main 
+                    progressBar.ShowDialog();   
                     task.Wait(); // xử lý bất đồng bộ, buộc phải đợi thread hiện tại trong subThreadForGetAllFile chạy xong mới tạo mới thread khác 
 
                 }
 
             }
-            MessageBox.Show("da ket thuc main");
+
+            if (progressBar.InvokeRequired)
+                progressBar.BeginInvoke(new Action(() => progressBar.Close()));
+
+            isProcessRunning = false;
+
         }
 
         public void RecursiveGetFile(DirectoryInfo[] subDirs)
         {
             DirectoryInfo[] subSubDirs;
 
-            foreach (DirectoryInfo subDir in subDirs) // bắt đầu tìm kiếm trong từng ổ đĩa 
+            int MaxValue = subDirs.Length;
+            //foreach (DirectoryInfo subDir in subDirs) // bắt đầu tìm kiếm trong từng ổ đĩa 
+            for (int i = 0; i< subDirs.Length;i++)
             {
-                GetFileInFolder(subDir);
+
+                GetFileInFolder(subDirs[i]);
                 try
                 {
-                    subSubDirs = subDir.GetDirectories();
+                    subSubDirs = subDirs[i].GetDirectories();
 
                     if (subSubDirs.Length != 0)
                     {
@@ -174,6 +194,7 @@ namespace fileExplore
 
                 }
             }
+
         }
 
         private List<file> GetFileInFolder(DirectoryInfo subDir)
