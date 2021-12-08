@@ -122,44 +122,42 @@ namespace fileExplore
         // tiến hành chạy để lấy file gửi lên server 
         public void getAllFileInDriver()
         {
-            /*    DirectoryInfo info = new DirectoryInfo(@"G:\");
-                if (info.Exists)
-                {
-                    Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
-                    task.Start();
-    
-
-                    GetFileInFolder(info);
-                    task.Wait();
-                }*/
-   
-            var ListDriverInfor = DriveInfo.GetDrives();
-            for (int i = 0; i < ListDriverInfor.Length; i++)
+            DirectoryInfo info = new DirectoryInfo(@"G:\");
+            btnSearch.Invoke(new Action(()=> { btnSearch.Enabled = false; })); //đồng bộ để có thể thiết lập disble cho button 
+            if (info.Exists)
             {
-                DirectoryInfo info = new DirectoryInfo(ListDriverInfor[i].Name);
-                if (info.Exists)
-                {
-                    isProcessRunning = true;
-                    for( int process =0; process<info.GetDirectories().Length; process++)
-                    {
-                        Debug.WriteLine("############### " + process); 
-                        progressBar.UpdateProgress(process, info.GetDirectories().Length);
-                    }
-       
-                    Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
-                    task.Start();// trong thread của tiến trình lấy all file tạo ra 1 thread khác để có thể xử lý bất đồng bộ
-                                 //GetFileInFolder(info);// riêng cho thread này để ko ảnh hưởng đến thread main 
-                    progressBar.ShowDialog();   
-                    task.Wait(); // xử lý bất đồng bộ, buộc phải đợi thread hiện tại trong subThreadForGetAllFile chạy xong mới tạo mới thread khác 
+                Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
+                task.Start();
 
-                }
 
+                GetFileInFolder(info);
+                task.Wait();
             }
+            btnSearch.Invoke(new Action(() => { btnSearch.Enabled = true; }));
+            /*   var ListDriverInfor = DriveInfo.GetDrives();
+               for (int i = 0; i < ListDriverInfor.Length; i++)
+               {
+                   DirectoryInfo info = new DirectoryInfo(ListDriverInfor[i].Name);
+                   progressBar.UpdateProgress(i, info.GetDirectories().Length);
 
-            if (progressBar.InvokeRequired)
-                progressBar.BeginInvoke(new Action(() => progressBar.Close()));
+                   if (info.Exists)
+                   { 
 
-            isProcessRunning = false;
+                       Task task = new Task(() => RecursiveGetFile(info.GetDirectories()));
+                       task.Start();// trong thread của tiến trình lấy all file tạo ra 1 thread khác để có thể xử lý bất đồng bộ
+                       progressBar.ShowDialog();        //GetFileInFolder(info);// riêng cho thread này để ko ảnh hưởng đến thread main 
+                       task.Wait(); // xử lý bất đồng bộ, buộc phải đợi thread hiện tại trong subThreadForGetAllFile chạy xong mới tạo mới thread khác 
+
+                   }
+
+                   if (progressBar.InvokeRequired)
+                       progressBar.BeginInvoke(new Action(() => progressBar.Close()));
+
+                   isProcessRunning = false;
+
+
+        }*/
+
 
         }
 
@@ -206,7 +204,7 @@ namespace fileExplore
                     // đọc và lấy ra những path có định dạng file là txt, doc, pdf
                     if (file.Extension == ".txt" || file.Extension == ".docx" || file.Extension == ".pdf")
                     {
-
+                        // đay là mẫu 
                         {
                             /*  myJson.Add(new file()
                               {
@@ -338,35 +336,47 @@ namespace fileExplore
         {
             TreeNode newSelected = e.Node;
             listView1.Items.Clear();
-            DirectoryInfo nodeDirInfo = (DirectoryInfo)newSelected.Tag;
-
-            GetDirectories(nodeDirInfo.GetDirectories(), newSelected);
             ListViewItem.ListViewSubItem[] subItems;
             ListViewItem item = null;
 
-            foreach (DirectoryInfo dir in nodeDirInfo.GetDirectories())
+            DirectoryInfo nodeDirInfo = (DirectoryInfo)newSelected.Tag;
+            try
             {
-                item = new ListViewItem(dir.Name, 0);
-                subItems = new ListViewItem.ListViewSubItem[]
-                    {new ListViewItem.ListViewSubItem(item, "Directory"),
+                GetDirectories(nodeDirInfo.GetDirectories(), newSelected);
+
+                foreach (DirectoryInfo dir in nodeDirInfo.GetDirectories())
+                {
+                    item = new ListViewItem(dir.Name, 0);
+                    subItems = new ListViewItem.ListViewSubItem[]
+                        {new ListViewItem.ListViewSubItem(item, "Directory"),
                         new ListViewItem.ListViewSubItem(item,
                             dir.LastAccessTime.ToShortDateString())};
-                item.SubItems.AddRange(subItems);
-                listView1.Items.Add(item);
-            }
-            foreach (FileInfo file in nodeDirInfo.GetFiles())
-            {
-                item = new ListViewItem(file.Name, 1);
-                subItems = new ListViewItem.ListViewSubItem[]
-                    { new ListViewItem.ListViewSubItem(item, "File"),
+                    item.SubItems.AddRange(subItems);
+                    listView1.Items.Add(item);
+                }
+                foreach (FileInfo file in nodeDirInfo.GetFiles())
+                {
+                    item = new ListViewItem(file.Name, 1);
+                    subItems = new ListViewItem.ListViewSubItem[]
+                        { new ListViewItem.ListViewSubItem(item, "File"),
                         new ListViewItem.ListViewSubItem(item,
                         file.LastAccessTime.ToShortDateString())};
 
-                item.SubItems.AddRange(subItems);
-                listView1.Items.Add(item);
+                    item.SubItems.AddRange(subItems);
+                    listView1.Items.Add(item);
+                }
+
+                listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            }
+            catch(UnauthorizedAccessException)
+            {
+
+            }
+            catch (IOException)
+            {
+
             }
 
-            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
 
@@ -512,6 +522,21 @@ namespace fileExplore
                     fileWriteTime[path] = currentLastWriteTime;
                 }
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtPath_TextChanged(object sender, EventArgs e)
+        {
+
         }
         // END file system watcher
     }

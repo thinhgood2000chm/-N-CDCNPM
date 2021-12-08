@@ -31,7 +31,6 @@ namespace fileExplore
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.treeViewEx = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -70,21 +69,13 @@ namespace fileExplore
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.roundButton1 = new fileExplore.RoundButton();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.treeViewEx = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // treeViewEx
-            // 
-            this.treeViewEx.ImageIndex = 0;
-            this.treeViewEx.ImageList = this.imageList1;
-            this.treeViewEx.Location = new System.Drawing.Point(0, 108);
-            this.treeViewEx.Name = "treeViewEx";
-            this.treeViewEx.SelectedImageIndex = 2;
-            this.treeViewEx.Size = new System.Drawing.Size(182, 343);
-            this.treeViewEx.TabIndex = 0;
-            this.treeViewEx.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewEx_AfterSelect);
             // 
             // imageList1
             // 
@@ -101,10 +92,10 @@ namespace fileExplore
             this.columnHeader2,
             this.columnHeader3});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(187, 108);
+            this.listView1.Location = new System.Drawing.Point(198, 15);
             this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(602, 343);
+            this.listView1.Size = new System.Drawing.Size(620, 343);
             this.listView1.SmallImageList = this.imageList1;
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -136,7 +127,7 @@ namespace fileExplore
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(832, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -367,19 +358,21 @@ namespace fileExplore
             this.btnSearch.BackColor = System.Drawing.Color.IndianRed;
             this.btnSearch.Font = new System.Drawing.Font("Yu Gothic UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.Bisque;
-            this.btnSearch.Location = new System.Drawing.Point(653, 40);
+            this.btnSearch.Location = new System.Drawing.Point(592, 22);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(70, 35);
             this.btnSearch.TabIndex = 8;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // txtPath
             // 
-            this.txtPath.Location = new System.Drawing.Point(301, 47);
+            this.txtPath.Location = new System.Drawing.Point(236, 32);
             this.txtPath.Name = "txtPath";
             this.txtPath.Size = new System.Drawing.Size(337, 20);
             this.txtPath.TabIndex = 7;
+            this.txtPath.TextChanged += new System.EventHandler(this.txtPath_TextChanged);
             // 
             // label1
             // 
@@ -388,55 +381,68 @@ namespace fileExplore
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label1.Font = new System.Drawing.Font("Yu Gothic UI Semibold", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Bisque;
-            this.label1.Location = new System.Drawing.Point(213, 43);
+            this.label1.Location = new System.Drawing.Point(143, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 30);
             this.label1.TabIndex = 6;
             this.label1.Text = "Path";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // roundButton1
+            // panel1
             // 
-            this.roundButton1.Location = new System.Drawing.Point(39, 47);
-            this.roundButton1.Name = "roundButton1";
-            this.roundButton1.Size = new System.Drawing.Size(57, 46);
-            this.roundButton1.TabIndex = 9;
-            this.roundButton1.Text = "roundButton1";
-            this.roundButton1.UseVisualStyleBackColor = true;
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.txtPath);
+            this.panel1.Controls.Add(this.btnSearch);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 24);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(832, 76);
+            this.panel1.TabIndex = 10;
             // 
-            // progressBar1
+            // panel3
             // 
-            this.progressBar1.Location = new System.Drawing.Point(358, 73);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(241, 23);
-            this.progressBar1.TabIndex = 10;
+            this.panel3.Controls.Add(this.treeViewEx);
+            this.panel3.Controls.Add(this.listView1);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(0, 144);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(832, 359);
+            this.panel3.TabIndex = 12;
+            // 
+            // treeViewEx
+            // 
+            this.treeViewEx.ImageIndex = 0;
+            this.treeViewEx.ImageList = this.imageList1;
+            this.treeViewEx.Location = new System.Drawing.Point(3, 15);
+            this.treeViewEx.Name = "treeViewEx";
+            this.treeViewEx.SelectedImageIndex = 2;
+            this.treeViewEx.Size = new System.Drawing.Size(182, 343);
+            this.treeViewEx.TabIndex = 0;
+            this.treeViewEx.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewEx_AfterSelect);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.roundButton1);
-            this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.txtPath);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(832, 503);
+            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.listView1);
-            this.Controls.Add(this.treeViewEx);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TreeView treeViewEx;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -475,8 +481,9 @@ namespace fileExplore
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Label label1;
-        private RoundButton roundButton1;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.TreeView treeViewEx;
     }
 }
 

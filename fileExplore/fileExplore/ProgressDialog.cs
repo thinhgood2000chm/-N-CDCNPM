@@ -50,5 +50,10 @@ namespace fileExplore
                     progressBar.Style = ProgressBarStyle.Blocks;
             }
         }
+
+        private void progressBar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
